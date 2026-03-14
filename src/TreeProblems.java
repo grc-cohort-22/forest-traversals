@@ -157,7 +157,7 @@ public class TreeProblems {
           break;
         }
       }
-      
+
       if (flag == false) {
         return k;
       }
@@ -185,7 +185,13 @@ public class TreeProblems {
    
   */
   public static <T> int maxDepth(Node<T> root) {
-    return -1;
+    if (root == null) { return 0; }
+    if (root.children.isEmpty()) {return 1;}
+    int depth = 1;
+    for(Node<T> child: root.children){
+      depth = Math.max(maxDepth(child) + 1, depth);
+    }
+    return depth;
   }
 
   /*
