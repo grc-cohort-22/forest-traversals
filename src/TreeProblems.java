@@ -67,7 +67,7 @@ public class TreeProblems {
       4  1  2
    */
   public static <T> void postOrder(Map<T, List<T>> tree, T root) {
-    if (!tree.containsKey(root)) {
+    if (!tree.containsKey(root) || root == null) {
       return;
     }
     List<T> children = tree.get(root);
