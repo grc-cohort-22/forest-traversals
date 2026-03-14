@@ -195,16 +195,24 @@ public class TreeProblems {
    
   */
   public static <T> int maxDepth(Node<T> root) {
+    // if root is null, return 0
     if (root == null) return 0;
 
+    // create a variable to hold max depth
     int maxDepth = 0;
 
-    for (List<T> child : children) {
-
+    // loop through each child 
+    for (Node<T> child : root.children) {
+      // recurse the children to find the deepest path
+      int childDepth = maxDepth(child);
+      // compare child depth to max depth
+      if (childDepth > maxDepth) {
+        // make max depth equal child depth
+        maxDepth = childDepth;
+      }
     }
-
-
-    return -1;
+    // return max depth + 1 for the root level
+    return maxDepth + 1;
   }
 
   /*
