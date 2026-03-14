@@ -130,13 +130,11 @@ public class TreeProblems {
     if(tree == null){
       return 0;
     }
-    int sum = 0;
-    
-    tree.forEach((key, list) -> {
-    for (int value : list) {
-      sum += value;
+     int sum = 0;
+
+    for(int child : tree.keySet()) {
+      sum += child;
     }
-  });
     return sum;
 
   }
