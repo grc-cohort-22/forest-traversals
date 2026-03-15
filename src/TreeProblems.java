@@ -30,12 +30,16 @@ public class TreeProblems {
    If the root is null, do nothing.
    */
   public static <T> void postOrder(Node<T> root) {
-    if (root == null) return;
-       for (Node<T> child : root.children) {
-        postOrder(child);
-      }
-    System.out.println(root.value);
+   if (root == null) return;
+
+    if (root.children != null) {
+        for (Node<T> child : root.children) {
+            postOrder(child);
+        }
+    }
+    System.out.print(root.value + "\n");
   }
+  
 
   /*
    postOrder (Node Version)
@@ -68,7 +72,7 @@ public class TreeProblems {
         postOrder(tree, child);
     }
 
-    System.out.println(root);
+    System.out.print(root + "\n");
 }
 
   /*
