@@ -1,5 +1,8 @@
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class TreeProblems {
 
@@ -28,6 +31,12 @@ public class TreeProblems {
    If the root is null, do nothing.
    */
   public static <T> void postOrder(Node<T> root) {
+    if (root == null) return;
+
+    for (Node<T> child : root.children) {
+      postOrder(child);
+    }
+    System.out.println(root.value);
   }
 
   /*
@@ -55,6 +64,17 @@ public class TreeProblems {
    5
    */
   public static <T> void postOrder(Map<T, List<T>> tree, T root) {
+    if (tree == null || !tree.containsKey(root)) {
+      return;
+    }
+
+    List<T> children = tree.get(root);
+
+    for (T child : children) {
+      postOrder(tree, child);
+    }
+
+    System.out.println(root);
   }
 
   /*
@@ -72,7 +92,15 @@ public class TreeProblems {
    A null tree should return 0
   */
   public static int sumTree(Node<Integer> root) {
-    return -1;
+    if (root == null) return 0; 
+
+    int sum = 0;
+
+    for (Node<Integer> child : root.children) {
+      sum += sumTree(child);
+    }
+    
+    return sum + root.value;
   }
 
   /*
@@ -95,7 +123,15 @@ public class TreeProblems {
    Hint: There's a simple way to do this!
   */
   public static int sumTree(Map<Integer, List<Integer>> tree) {
-    return -1;
+    if (tree == null) return 0;
+
+    int sum = 0;
+
+    for (int val : tree.keySet()) {
+      sum += val;
+    }
+
+    return sum;
   }
 
   /*
@@ -118,6 +154,25 @@ public class TreeProblems {
    Hint: No recursion needed! Think about how you would do this by hand.
   */
   public static <T> T findRoot(Map<T, List<T>> tree) {
+    // Create a set to store every node that appears as a child
+    Set<T> set = new TreeSet<>();
+
+    // Loop through all the values in the map (each value is a list of children)
+    for (List<T> children : tree.values()) {
+      // Loop through each child in the current list
+      for (T child : children) {
+        // Add the child to the set
+        set.add(child);
+      } 
+    }
+
+    // Check every node that appears as a parent (the map keys)    
+    for (T node : tree.keySet()) {
+      // If a node never appeared in the child set, it means it has not parent, so it must be a root
+      if (!set.contains(node)) {
+        return node;
+      }
+    }
     return null;
   }
 
@@ -140,7 +195,24 @@ public class TreeProblems {
    
   */
   public static <T> int maxDepth(Node<T> root) {
-    return -1;
+    // if root is null, return 0
+    if (root == null) return 0;
+
+    // create a variable to hold max depth
+    int maxDepth = 0;
+
+    // loop through each child 
+    for (Node<T> child : root.children) {
+      // recurse the children to find the deepest path
+      int childDepth = maxDepth(child);
+      // compare child depth to max depth
+      if (childDepth > maxDepth) {
+        // make max depth equal child depth
+        maxDepth = childDepth;
+      }
+    }
+    // return max depth + 1 for the root level
+    return maxDepth + 1;
   }
 
   /*
@@ -162,6 +234,39 @@ public class TreeProblems {
    Hint: Use findRoot to start. Then, make a recursive helper method.
   */
   public static int maxDepth(Map<String, List<String>> tree) {
-    return -1;
+    // if tree is null, return 0
+    if (tree == null) return 0;
+
+    // Find root of the tree
+    String root = findRoot(tree);
+
+    // Calculate depth recursively from the root
+    return helperMaxDepth(tree, root);
+  }
+
+  private static int helperMaxDepth(Map<String, List<String>> tree, String current) {
+    // get the current node's children from the map
+    List<String> children = tree.get(current);
+
+    // if the node has no children that means it's a leaf and a leaf has a depth of 1
+    if (children.isEmpty()) {
+      return 1;
+    }
+
+    // Variable to keep track of largest child subtree depth
+    int maxChildDepth = 0;
+
+    // loop through the child subtree recursively 
+    for (String child : children) {
+      int childDepth = helperMaxDepth(tree, child);
+
+      // if child depth is greater than max
+      if (childDepth > maxChildDepth) {
+        // max equals child depth
+        maxChildDepth = childDepth;
+      }
+    }
+    // return max + 1 for the level of the root
+    return maxChildDepth + 1;
   }
 }
