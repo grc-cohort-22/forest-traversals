@@ -1,5 +1,8 @@
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TreeProblems {
 
@@ -84,7 +87,12 @@ public class TreeProblems {
    A null tree should return 0
   */
   public static int sumTree(Node<Integer> root) {
-    return -1;
+    if(root == null) return 0; 
+    int value = 0;
+    for(Node<Integer> child: root.children){
+      value += sumTree(child);
+    }
+    return value + root.value;
   }
 
   /*
@@ -107,7 +115,12 @@ public class TreeProblems {
    Hint: There's a simple way to do this!
   */
   public static int sumTree(Map<Integer, List<Integer>> tree) {
-    return -1;
+    if(tree == null) return 0;
+    int sum = 0;
+    for(int child : tree.keySet()) {
+      sum += child;
+    }
+    return sum;
   }
 
   /*
@@ -130,6 +143,15 @@ public class TreeProblems {
    Hint: No recursion needed! Think about how you would do this by hand.
   */
   public static <T> T findRoot(Map<T, List<T>> tree) {
+    List<T> list = new ArrayList<>();
+    for(List<T> child : tree.values()){
+      list.addAll(child);
+    }
+    for(T child: tree.keySet()){
+      if(!list.contains(child)){
+        return child;
+      }
+    }
     return null;
   }
 
@@ -152,7 +174,12 @@ public class TreeProblems {
    
   */
   public static <T> int maxDepth(Node<T> root) {
-    return -1;
+    if(root == null) return 0; 
+    int compare = 0;
+    for(Node<T> child: root.children){
+      compare = Math.max(compare, maxDepth(child));
+    }
+    return compare + 1;
   }
 
   /*
@@ -174,6 +201,16 @@ public class TreeProblems {
    Hint: Use findRoot to start. Then, make a recursive helper method.
   */
   public static int maxDepth(Map<String, List<String>> tree) {
-    return -1;
+    if(tree == null) return 0;
+    String root = findRoot(tree);
+    return maxDepth(tree, root);
+  }
+  private static int maxDepth(Map<String, List<String>> tree, String root){
+    if(tree.get(root).isEmpty())return 1;
+    int value = 0;
+    for(String child: tree.get(root)){
+      value = Math.max(value, maxDepth(tree, child));
+    }
+    return value + 1;
   }
 }
