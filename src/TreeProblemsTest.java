@@ -24,6 +24,14 @@ public class TreeProblemsTest {
     System.setOut(originalOut);
   }
 
+  private List<String> outputLines() {
+    String output = baos.toString();
+    if (output.isEmpty()) {
+      return List.of();
+    }
+    return Arrays.asList(output.split("\\R"));
+  }
+
   // ============================
   // postOrder (Node version) tests
   // ============================
@@ -31,14 +39,14 @@ public class TreeProblemsTest {
   @Test
   public void testPostOrderNode_NullTree() {
     TreeProblems.postOrder(null);
-    assertEquals("A null Node tree should produce no output", "", baos.toString());
+    assertEquals("A null Node tree should produce no output", List.of(), outputLines());
   }
 
   @Test
   public void testPostOrderNode_SingleNode() {
     Node<Integer> single = new Node<>(42);
     TreeProblems.postOrder(single);
-    assertEquals("A single-node tree should print its value", "42\n", baos.toString());
+    assertEquals("A single-node tree should print its value", List.of("42"), outputLines());
   }
 
   @Test
@@ -58,7 +66,7 @@ public class TreeProblemsTest {
     node9.children.add(node2);
 
     TreeProblems.postOrder(root);
-    assertEquals("Complex Node tree postorder traversal output is incorrect", "3\n4\n1\n2\n9\n8\n5\n", baos.toString());
+    assertEquals("Complex Node tree postorder traversal output is incorrect", List.of("3", "4", "1", "2", "9", "8", "5"), outputLines());
   }
 
   // ============================
@@ -68,7 +76,7 @@ public class TreeProblemsTest {
   @Test
   public void testPostOrderMap_NullTree() {
     TreeProblems.postOrder(null, 0);
-    assertEquals("A null Map tree should produce no output", "", baos.toString());
+    assertEquals("A null Map tree should produce no output", List.of(), outputLines());
   }
 
   @Test
@@ -78,7 +86,7 @@ public class TreeProblemsTest {
     tree.put(2, List.of());
     tree.put(3, List.of());
     TreeProblems.postOrder(tree, 99);
-    assertEquals("A tree that does not contain the root should produce no output", "", baos.toString());
+    assertEquals("A tree that does not contain the root should produce no output", List.of(), outputLines());
   }
 
   @Test
@@ -86,7 +94,7 @@ public class TreeProblemsTest {
     Map<Integer, List<Integer>> tree = new HashMap<>();
     tree.put(42, List.of());
     TreeProblems.postOrder(tree, 42);
-    assertEquals("A single-node Map tree should print its value", "42\n", baos.toString());
+    assertEquals("A single-node Map tree should print its value", List.of("42"), outputLines());
   }
 
   @Test
@@ -101,7 +109,7 @@ public class TreeProblemsTest {
     tree.put(2, List.of());
 
     TreeProblems.postOrder(tree, 5);
-    assertEquals("Complex Map tree postorder traversal output is incorrect", "3\n4\n1\n2\n9\n8\n5\n", baos.toString());
+    assertEquals("Complex Map tree postorder traversal output is incorrect", List.of("3", "4", "1", "2", "9", "8", "5"), outputLines());
   }
 
   // =============================
