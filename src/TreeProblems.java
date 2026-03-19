@@ -28,6 +28,14 @@ public class TreeProblems {
    If the root is null, do nothing.
    */
   public static <T> void postOrder(Node<T> root) {
+    if(root == null){
+      return;
+    }
+    // for each child
+    for (Node<T> child: root.children){
+      postOrder(child);
+    }
+    System.out.println(root.value);
   }
 
   /*
@@ -55,6 +63,14 @@ public class TreeProblems {
    5
    */
   public static <T> void postOrder(Map<T, List<T>> tree, T root) {
+    if(tree == null || root == null || !tree.containsKey(root)){
+      return;
+    }
+    List<T> children = tree.get(root);
+    for(T child: children){
+      postOrder(tree, child);
+    }
+    System.out.println(root);
   }
 
   /*
@@ -72,7 +88,15 @@ public class TreeProblems {
    A null tree should return 0
   */
   public static int sumTree(Node<Integer> root) {
-    return -1;
+    if(root == null){
+      return 0;
+    }
+    int sum = root.value;
+
+    for(Node<Integer> child: root.children){
+      sum += sumTree(child);
+    }
+    return sum;
   }
 
   /*
