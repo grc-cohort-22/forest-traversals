@@ -1,5 +1,7 @@
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public class TreeProblems {
 
@@ -28,6 +30,11 @@ public class TreeProblems {
    If the root is null, do nothing.
    */
   public static <T> void postOrder(Node<T> root) {
+    if (root == null) return;
+    for (Node<T> child : root.children) {
+      postOrder(child);
+    }
+    System.out.println(root.value);
   }
 
   /*
@@ -55,6 +62,11 @@ public class TreeProblems {
    5
    */
   public static <T> void postOrder(Map<T, List<T>> tree, T root) {
+    if (root == null || tree == null || !tree.containsKey(root)) return;
+    for (T value : tree.get(root)) {
+      postOrder(tree, value);
+    }
+    System.out.println(root);
   }
 
   /*
@@ -72,7 +84,12 @@ public class TreeProblems {
    A null tree should return 0
   */
   public static int sumTree(Node<Integer> root) {
-    return -1;
+    if (root == null) return 0;
+    int sum = root.value;
+    for (Node<Integer> current : root.children) {
+      sum+= sumTree(current);
+    }
+    return sum;
   }
 
   /*
@@ -95,7 +112,12 @@ public class TreeProblems {
    Hint: There's a simple way to do this!
   */
   public static int sumTree(Map<Integer, List<Integer>> tree) {
-    return -1;
+    int sum = 0;
+    if (tree == null) return sum;
+    for (int key : tree.keySet()) {
+      sum+=key;
+    }
+    return sum;
   }
 
   /*
@@ -118,6 +140,13 @@ public class TreeProblems {
    Hint: No recursion needed! Think about how you would do this by hand.
   */
   public static <T> T findRoot(Map<T, List<T>> tree) {
+    for (T key : tree.keySet()) {
+      boolean isRoot = true;
+      for (List<T> value : tree.values()) {
+        if (!value.isEmpty() && value.contains(key)) isRoot = false;
+      }
+      if (isRoot) return key;
+    }
     return null;
   }
 
@@ -140,7 +169,20 @@ public class TreeProblems {
    
   */
   public static <T> int maxDepth(Node<T> root) {
-    return -1;
+    int depth = 0;
+    if (root == null) return depth;
+    Queue<Node<T>> queue = new LinkedList<>();
+    queue.add(root);
+
+    while(!queue.isEmpty()) {
+      Node<T> temp = queue.poll();
+      if (temp.children.isEmpty()) {
+        depth++;
+        continue;
+      }
+      queue.addAll(temp.children);
+    }
+    return depth;
   }
 
   /*
@@ -162,6 +204,20 @@ public class TreeProblems {
    Hint: Use findRoot to start. Then, make a recursive helper method.
   */
   public static int maxDepth(Map<String, List<String>> tree) {
-    return -1;
+    if (tree == null) return 0;
+    String root = findRoot(tree);
+    int depth = 1;
+    depth += maxDepth(root, depth, tree);
+    return depth;
+  }
+
+  private static int maxDepth(String node, int depth, Map<String, List<String>> tree) {
+    if (tree.get(node).isEmpty()) return 0; // if leaf
+    int x = 0; // deepest child
+    for (String child : tree.get(node)) {
+      int y = maxDepth(child, depth, tree); // subtree depth
+      if (x < y) x = y;
+    }
+    return depth+=x;
   }
 }
